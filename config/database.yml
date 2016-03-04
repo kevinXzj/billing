@@ -1,0 +1,10 @@
+default: &default
+  adapter: mysql2
+  pool: 5
+  username: root
+  enconding: utf8
+  host: localhost
+
+development:
+  <<: *default
+  database: billing

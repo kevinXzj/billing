@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  bill_number: MyString
+  tel_office: MyString
+  apply_at: 2016-03-01
+
+two:
+  name: MyString
+  bill_number: MyString
+  tel_office: MyString
+  apply_at: 2016-03-01

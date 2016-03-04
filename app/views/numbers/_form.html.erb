@@ -1,0 +1,33 @@
+<%= form_for(@number) do |f| %>
+  <% if @number.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@number.errors.count, "error") %> prohibited this number from being saved:</h2>
+
+      <ul>
+      <% @number.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :phone_num %><br>
+    <%= f.text_field :phone_num %>
+  </div>
+  <div class="field">
+    <%= f.label :real_num %><br>
+    <%= f.text_field :real_num %>
+  </div>
+  <div class="field">
+    <%= f.label :apply_at %><br>
+    <%= f.date_select :apply_at %>
+  </div>
+  <div class="field">
+    <%= f.label :company_id %><br>
+    <%= f.select :company_id, Company.all.collect { |c| [ c.name, c.id ] }, include_blank: true %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

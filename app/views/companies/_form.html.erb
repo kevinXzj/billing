@@ -1,0 +1,33 @@
+<%= form_for(@company) do |f| %>
+  <% if @company.errors.any? %>
+    <div id="error_explanation">
+      <h2>错误:</h2>
+
+      <ul>
+      <% @company.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :bill_num %><br>
+    <%= f.text_field :bill_num %>
+  </div>
+  <div class="field">
+    <%= f.label :tel_office %><br>
+    <%= f.text_field :tel_office %>
+  </div>
+  <div class="field">
+    <%= f.label :apply_at %><br>
+    <%= f.date_select :apply_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

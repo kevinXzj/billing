@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer_id: 1
+  phonenumber_id: 1
+  assign_date: 2016-02-26 17:04:49
+  recovery_date: 2016-02-26 17:04:49
+
+two:
+  customer_id: 1
+  phonenumber_id: 1
+  assign_date: 2016-02-26 17:04:49
+  recovery_date: 2016-02-26 17:04:49

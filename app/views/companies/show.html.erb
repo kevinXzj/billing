@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= company_attribute_name :name %></strong>
+  <%= @company.name %>
+</p>
+
+<p>
+  <strong><%= company_attribute_name :bill_num %></strong>
+  <%= @company.bill_num %>
+</p>
+
+<p>
+  <strong><%= company_attribute_name :tel_office %></strong>
+  <%= @company.tel_office %>
+</p>
+
+<p>
+  <strong><%= company_attribute_name :apply_at %></strong>
+  <%= @company.apply_at %>
+</p>
+
+<h4>号码列表</h4>
+<table class="gtab">
+  <thead>
+    <tr>
+      <th><%= Number.human_attribute_name :phone_num %></th>
+      <th><%= Number.human_attribute_name :real_num %></th>
+      <th><%= Number.human_attribute_name :apply_at %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @company.numbers.each do |number| %>
+      <tr>
+        <td><%= number.phone_num %></td>
+        <td><%= number.real_num %></td>
+        <td><%= number.apply_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to '修改', edit_company_path(@company) %> |
+<%= link_to '返回', companies_path %>

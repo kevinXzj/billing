@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h3>号码列表</h3>
+
+<table class="gtab">
+  <thead>
+    <tr>
+      <th><%= Number.human_attribute_name :phone_num %></th>
+      <th><%= Number.human_attribute_name :real_num %></th>
+      <th><%= Number.human_attribute_name :apply_at %></th>
+      <th><%= Number.human_attribute_name :company_id %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @numbers.each do |number| %>
+      <tr>
+        <td><%= number.phone_num %></td>
+        <td><%= number.real_num %></td>
+        <td><%= number.apply_at %></td>
+        <td><%= number.company.name %></td>
+        <td><%= link_to '查看', number %></td>
+        <td><%= link_to '修改', edit_number_path(number) %></td>
+        <td><%= link_to '删除', number, method: :delete, data: { confirm: '确定删除?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @numbers -%><%= page_entries_info @numbers %>
+<br>
+
+<%= link_to '创建号码', new_number_path %>
