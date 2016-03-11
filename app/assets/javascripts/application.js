@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require twitter/bootstrap
+//= require wice_grid
+//= require jquery-ui/datepicker
 //= require turbolinks
 //= require jquery-readyselector
 //= require_tree .

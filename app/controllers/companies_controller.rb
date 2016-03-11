@@ -4,7 +4,9 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.json
   def index
-    @companies = Company.order(id: :desc).page params[:page]
+    @companies_grid = initialize_grid(Company, 
+      order:'companies.id', 
+      order_direction: 'desc')
   end
 
   # GET /companies/1
@@ -17,6 +19,18 @@ class CompaniesController < ApplicationController
     @company = Company.new
   end
 
+  # GET /companies/import
+  def import
+    xlsx = Roo::Spreadsheet.open('./test_data/tc.xlsx')
+    xlsx.each_row_streaming(offset: 1) do |row|
+      c = Company.new()
+      c.tel_office = row[0].cell_value
+      c.name = row[1].cell_value
+      c.bill_num = row[2].cell_value
+      puts c.inspect
+    end
+  end
+
   # GET /companies/1/edit
   def edit
   end
@@ -25,7 +39,6 @@ class CompaniesController < ApplicationController
   # POST /companies.json
   def create
     @company = Company.new(company_params)
-
     respond_to do |format|
       if @company.save
         format.html { redirect_to companies_url, notice: '删除成功' }
@@ -60,6 +73,8 @@ class CompaniesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

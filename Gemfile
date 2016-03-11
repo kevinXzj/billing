@@ -43,3 +43,12 @@ gem 'kaminari'
 
 gem 'rails-i18n'
 
+gem 'jquery-ui-rails'
+
+gem "twitter-bootstrap-rails"
+
+gem 'wice_grid', '3.6.0.pre4'
+
+gem 'font-awesome-sass', '~> 4.5.0'
+
+gem 'roo', '~> 2.3.2'

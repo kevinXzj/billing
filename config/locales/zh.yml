@@ -2,6 +2,7 @@ zh:
   activerecord:
     models:
       company: "套餐"
+      number: "号码"
     attributes:
       company:
         name: "套餐名称"

@@ -1,8 +1,10 @@
-
-<%=  form_tag sessions_path do -%>
-	<label for="login">登录名:</label>
-	<%= text_field_tag :login,params[:login] %>
-	<label for="password">密码:</label>
-	<%= password_field_tag :password, params[:password] %>
-	<%= submit_tag "登录" %>
+<%= form_tag sessions_path , class: "navbar-form " do -%>
+	<p>
+		<label for="login">帐号:</label>
+		<%= text_field_tag :login,params[:login] %>
+	</p>
+	<p>
+		<label for="password">密码:</label>
+		<%= password_field_tag :password, params[:password] %><%= submit_tag "登录" %>
+	</p>
 <% end %>

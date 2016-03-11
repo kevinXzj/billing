@@ -1,37 +1,42 @@
+<h3><%= company_model_name %>列表</h3>
+<%= grid(@companies_grid) do |g|
+
+  g.column name:"#{company_attribute_name :name}", attribute: 'name' do |company|
+    company.name
+  end
 
 
-<p id="notice"><%= notice %></p>
-<h3><%= company_model_name %>列表</h1>
-<table class="gtab">
-  <thead>
-    <tr>
-      <!-- <th><%= company_attribute_name :id %></th> -->
-      <th><%= company_attribute_name :name %></th>
-      <th><%= company_attribute_name :bill_num %></th>
-      <th><%= company_attribute_name :tel_office %></th>
-      <th><%= company_attribute_name :numbers_count %></th>
-      <th><%= company_attribute_name :apply_at %></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+  g.column name:"#{company_attribute_name :bill_num}", attribute: 'bill_num'  do |company|
+    company.bill_num
+  end
 
-  <tbody>
-    <% @companies.each do |company| %>
-      <tr>
-        <!-- <td><%= company.id %></td> -->
-        <td><%= company.name %></td>
-        <td><%= company.bill_num %></td>
-        <td><%= company.tel_office %></td>
-        <td><%= company.numbers.size %></td>
-        <td><%= company.apply_at %></td>
-        <td><%= link_to '查看', company %></td>
-        <td><%= link_to '修改', edit_company_path(company) %></td>
-        <td><%= link_to '删除', company, method: :delete, data: { confirm: '确定删除' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  g.column name:"#{company_attribute_name :tel_office}", attribute:'tel_office' do |company|
+    company.tel_office
+  end
 
-<%= paginate @companies-%><%= page_entries_info @companies, :entry_name =>"套餐" %>
+  g.column name:"#{company_attribute_name :numbers_count}"  do |company|
+    company.numbers.size
+  end
+
+  g.column name:"#{company_attribute_name :apply_at}", attribute:'apply_at', filter:false  do |company|
+    company.apply_at
+  end
+
+  g.column do |company|
+    link_to('查看', company )
+  end
+  g.column do |company|
+    link_to('修改', edit_company_path(company) )
+  end
+  g.column do |company|
+    link_to('删除', company, method: :delete, 
+      data: { confirm: "#{('该套餐包含'+company.numbers.size.to_s+'号码,') unless company.numbers.size < 1 }确定删除?" } )
+  end
+end -%>
 <br>
-<%= link_to "新建#{company_model_name}", new_company_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_company_path,
+            :class => 'btn btn-primary' %>
+<%= link_to t('.import', :default => '导入'),
+            import_companies_path,
+            :class => 'btn btn-primary' %>

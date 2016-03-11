@@ -7,17 +7,34 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>" >
-<h1>销售e加 帐务系统 </h1>
-<% if session[:user_id] != nil %>
-欢迎 <%= session[:user_login] %>  <%= link_to "退出", login_path ,method: :delete %>
-<h2> 
-	<%= link_to "套餐管理", companies_path %>
-	<%= link_to "号码管理", numbers_path %>
-	<%= link_to "账单管理", numbers_path %>
-	<%= link_to "资费管理", numbers_path %>
-</h2>
-<% end %>
-<%= flash[:alert] %>
-<%= yield %>
+<%= nav_bar static: :top, brand: "销售e加帐务系统" do %>
+	<% if session[:user_login] %>
+		<%= menu_group do %>
+      <%= menu_item "首页", root_path %>
+      <%= menu_item "套餐管理", companies_path %>
+      <%= menu_item "号码管理", numbers_path %>
+  	<% end %>
+  	<%= menu_group pull: :right do %>
+    	<%= menu_item "退出", login_out_path %>
+		<% end -%>
+	<% else %>
+	<!--
+		<%= form_tag sessions_path , class: "navbar-form pull-right" do -%>
+			<p>
+				<label for="login">帐号:</label>
+				<%= text_field_tag :login,params[:login] %>
+			</p>
+			<p>
+				<label for="password">密码:</label>
+				<%= password_field_tag :password, params[:password] %><%= submit_tag "登录" %>
+			</p>
+		<% end %>
+	-->
+	<% end -%>
+<% end -%>
+<div class="container">
+	<%= bootstrap_flash %>
+	<%= yield %>
+</div>
 </body>
 </html>

@@ -4,7 +4,9 @@ class NumbersController < ApplicationController
   # GET /numbers
   # GET /numbers.json
   def index
-    @numbers = Number.order(id: :desc).page params[:page]
+    @numbers_grid = initialize_grid(Number,
+      order: 'numbers.id',
+      order_direction: 'desc')
   end
 
   # GET /numbers/1

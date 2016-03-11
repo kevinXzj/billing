@@ -1,33 +1,55 @@
-<%= form_for(@number) do |f| %>
-  <% if @number.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@number.errors.count, "error") %> prohibited this number from being saved:</h2>
+<%= form_for @number, :html => { :class => "form-horizontal number" } do |f| %>
 
-      <ul>
-      <% @number.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <% if @number.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@number.errors.count, "error") %> prohibited this number from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @number.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :phone_num %><br>
-    <%= f.text_field :phone_num %>
+  <div class="form-group">
+    <%= f.label :phone_num, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :phone_num, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:phone_num) %>
   </div>
-  <div class="field">
-    <%= f.label :real_num %><br>
-    <%= f.text_field :real_num %>
+  <div class="form-group">
+    <%= f.label :real_num, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :real_num, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:real_num) %>
   </div>
-  <div class="field">
-    <%= f.label :apply_at %><br>
-    <%= f.date_select :apply_at %>
+  <div class="form-group">
+    <%= f.label :apply_at, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.date_select :apply_at, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:apply_at) %>
   </div>
-  <div class="field">
-    <%= f.label :company_id %><br>
-    <%= f.select :company_id, Company.all.collect { |c| [ c.name, c.id ] }, include_blank: true %>
+  <div class="form-group">
+    <%= f.label :company_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.select :company_id, Company.all.collect { |c| [ c.name, c.id ] }, include_blank: true %>
+    </div>
+    <%=f.error_span(:company_id) %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                numbers_path, :class => 'btn btn-default' %>
+    </div>
   </div>
+
 <% end %>

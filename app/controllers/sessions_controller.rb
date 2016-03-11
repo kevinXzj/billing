@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
 			# session[:user_id] = @user.id
 			log_in(@user)
 			# flash[:notice] = "欢迎 #{@user.login}"
-			redirect_to companies_path
+			redirect_to root_path
 		else
 			flash[:alert] = "用户名或者密码错误,请重试!"
 			redirect_to login_path
