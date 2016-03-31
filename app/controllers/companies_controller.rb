@@ -19,18 +19,6 @@ class CompaniesController < ApplicationController
     @company = Company.new
   end
 
-  # GET /companies/import
-  def import
-    xlsx = Roo::Spreadsheet.open('./test_data/tc.xlsx')
-    xlsx.each_row_streaming(offset: 1) do |row|
-      c = Company.new()
-      c.tel_office = row[0].cell_value
-      c.name = row[1].cell_value
-      c.bill_num = row[2].cell_value
-      puts c.inspect
-    end
-  end
-
   # GET /companies/1/edit
   def edit
   end
@@ -41,7 +29,7 @@ class CompaniesController < ApplicationController
     @company = Company.new(company_params)
     respond_to do |format|
       if @company.save
-        format.html { redirect_to companies_url, notice: '删除成功' }
+        format.html { redirect_to companies_url, notice: '创建成功' }
         format.json { head :no_content }
       else
         format.html { render :new }
@@ -56,10 +44,10 @@ class CompaniesController < ApplicationController
     respond_to do |format|
       if @company.update(company_params)
         format.html { redirect_to @company, notice: '修改成功' }
-        format.json { render :show, status: :ok, location: @company }
+        # format.json { render :show, status: :ok, location: @company }
       else
         format.html { render :edit }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
+        # format.json { render json: @company.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -68,8 +56,19 @@ class CompaniesController < ApplicationController
   # DELETE /companies/1.json
   def destroy
     @company.destroy
+    notice = '删除成功'
+  rescue ActiveRecord::DeleteRestrictionError => e
+    puts e.inspect
+    notice = '删除失败:包含其他信息无法删除'
+  rescue ActiveRecord::StatementInvalid => e
+    puts e.inspect
+    notice = '删除失败:包含其他信息无法删除'
+  rescue Exception => e
+    puts e.inspect
+    notice = e.message
+  ensure
     respond_to do |format|
-      format.html { redirect_to companies_url, notice: '删除成功' }
+      format.html { redirect_to companies_url, notice: notice }
       format.json { head :no_content }
     end
   end

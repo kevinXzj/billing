@@ -1,0 +1,35 @@
+<p>
+  <strong>文件名称</strong>
+  <%= @company_import_log.file_name %>
+</p>
+<p>
+  <strong>导入时间</strong>
+  <%= @company_import_log.created_at.strftime("%Y-%m-%d") %>
+</p>
+<p>
+  <strong>导入说明</strong>
+  <%= @company_import_log.remark %>
+</p>
+<p>
+  <strong>导入套餐列表</strong>
+  <% if @companies_grid != nil %>
+		<%= grid(@companies_grid) do |g|
+		  g.column name:"#{company_attribute_name :name}", attribute: 'name' do |company|
+		    company.name
+		  end
+		  g.column name:"#{company_attribute_name :bill_num}", attribute: 'bill_num'  do |company|
+		    company.bill_num
+		  end
+		  g.column name:"#{company_attribute_name :tel_office}", attribute:'tel_office' do |company|
+		    company.tel_office
+		  end
+		  g.column name:"#{company_attribute_name :apply_at}", attribute:'apply_at'   do |company|
+		    company.apply_at
+		  end
+		end -%>
+	<% end %>
+</p>
+
+
+<br>
+<%= link_to '返回', company_import_logs_path %>

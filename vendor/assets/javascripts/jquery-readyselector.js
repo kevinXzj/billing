@@ -1,4 +1,8 @@
 (function ($) {
+
+  // link http://brandonhilkert.com/blog/page-specific-javascript-in-rails/
+  // remove //= require turbolinks in application.js
+  
   var ready = $.fn.ready;
   $.fn.ready = function (fn) {
     if (this.context === undefined) {

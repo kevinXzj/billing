@@ -1,0 +1,9 @@
+<div id="error_explanation">
+  <h2>错误:</h2>
+  <ul>
+  <% @errors.each do |message| %>
+    <li><%= message %></li>
+  <% end %>
+  </ul>
+</div>
+<%= link_to '返回', bill_import_logs_path %>

@@ -18,7 +18,7 @@
     company.numbers.size
   end
 
-  g.column name:"#{company_attribute_name :apply_at}", attribute:'apply_at', filter:false  do |company|
+  g.column name:"#{company_attribute_name :apply_at}", attribute:'apply_at'   do |company|
     company.apply_at
   end
 
@@ -38,5 +38,5 @@ end -%>
             new_company_path,
             :class => 'btn btn-primary' %>
 <%= link_to t('.import', :default => '导入'),
-            import_companies_path,
+            company_import_logs_path,
             :class => 'btn btn-primary' %>

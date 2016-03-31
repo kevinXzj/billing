@@ -1,0 +1,17 @@
+<% @bill_list.each do |b| %>
+	<%= link_to "#{b.year}年#{b.month}月账单", {controller: "customers", action: "bill", id: @customer.id,  year:b.year, month:b.month } , :class => 'btn btn-default' %>
+<% end %>
+<% if @month.blank? %>
+	无账单
+<% else %>
+	<p>
+		<h4><%= @customer.name %> <%= @year%>年<%= @month%>月账单</h4>
+	</p>
+	<p>
+		<button data-grid-name="grid" class="btn btn-primary wg-external-csv-export-button">导出</button>
+	</p>
+	<%= render 'issue_numbers_grid' %>
+<% end %>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              customers_path, :class => 'btn btn-default'  %>

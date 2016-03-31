@@ -1,0 +1,37 @@
+<%= grid(@issue_numbers_grid, hide_csv_button:true) do |g|
+
+	g.blank_slate content_tag(:div, "无记录", class: 'well')
+
+  g.column name:"\xEF\xBB\xBF#{t_attr_name(BillItem,:number)}", 
+  attribute: 'phone_num', assoc: :number do |item|
+  	item.number.phone_num
+  end
+
+  g.column name:"#{t_attr_name(BillItem,:voice)}" do |item|
+    item.number.bill_items.active(@year,@month).first.voice unless item.number.bill_items.active(@year,@month).blank?
+  end
+
+  g.column name:"#{t_attr_name(BillItem,:message)}" do |item|
+    item.number.bill_items.active(@year,@month).first.message unless item.number.bill_items.active(@year,@month).blank?
+  end
+
+ 	g.column name:"#{t_attr_name(BillItem,:internet)}" do |item|
+    item.number.bill_items.active(@year,@month).first.internet unless item.number.bill_items.active(@year,@month).blank?
+  end
+
+  g.column name:"#{t_attr_name(BillItem,:service)}" do |item|
+    item.number.bill_items.active(@year,@month).first.service unless item.number.bill_items.active(@year,@month).blank?
+  end
+
+   g.column name:"#{t_attr_name(BillItem,:proxy)}" do |item|
+    item.number.bill_items.active(@year,@month).first.proxy unless item.number.bill_items.active(@year,@month).blank?
+  end
+
+   g.column name:"#{t_attr_name(BillItem,:proxy)}" do |item|
+    item.number.bill_items.active(@year,@month).first.proxy unless item.number.bill_items.active(@year,@month).blank?
+  end
+
+  g.column name:"#{t_attr_name(IssueNumber,:issue_at)}", attribute: 'issue_at' 
+
+  g.column name:"#{t_attr_name(IssueNumber,:back_at)}", attribute: 'back_at' 
+end -%>

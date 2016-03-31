@@ -1,46 +1,48 @@
-<p id="notice"><%= notice %></p>
-
+<%- model_class = Company -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => t_model_name(model_class) %></h1>
+</div>
 <p>
-  <strong><%= company_attribute_name :name %></strong>
+  <strong><%= t_attr_name(model_class, :name )%></strong>
   <%= @company.name %>
 </p>
 
 <p>
-  <strong><%= company_attribute_name :bill_num %></strong>
+  <strong><%= t_attr_name(model_class, :bill_num )%></strong>
   <%= @company.bill_num %>
 </p>
 
 <p>
-  <strong><%= company_attribute_name :tel_office %></strong>
+  <strong><%= t_attr_name(model_class, :tel_office )%></strong>
   <%= @company.tel_office %>
 </p>
 
 <p>
-  <strong><%= company_attribute_name :apply_at %></strong>
+  <strong><%= t_attr_name(model_class, :apply_at) %></strong>
   <%= @company.apply_at %>
 </p>
-
-<h4>号码列表</h4>
-<table class="gtab">
-  <thead>
-    <tr>
-      <th><%= Number.human_attribute_name :phone_num %></th>
-      <th><%= Number.human_attribute_name :real_num %></th>
-      <th><%= Number.human_attribute_name :apply_at %></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @company.numbers.each do |number| %>
+<p>
+  <strong>号码列表</strong>
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td><%= number.phone_num %></td>
-        <td><%= number.real_num %></td>
-        <td><%= number.apply_at %></td>
+        <th><%= t_attr_name(Number,:phone_num)  %></th>
+        <th><%= t_attr_name(Number,:real_num) %></th>
+        <th><%= t_attr_name(Number,:apply_at)%></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
+    <tbody>
+      <% @company.numbers.each do |number| %>
+        <tr>
+          <td><%= number.phone_num %></td>
+          <td><%= number.real_num %></td>
+          <td><%= number.apply_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
 <br>
 <%= link_to '修改', edit_company_path(@company) %> |
 <%= link_to '返回', companies_path %>

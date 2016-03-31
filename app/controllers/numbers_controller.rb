@@ -5,8 +5,13 @@ class NumbersController < ApplicationController
   # GET /numbers.json
   def index
     @numbers_grid = initialize_grid(Number,
-      order: 'numbers.id',
-      order_direction: 'desc')
+      :include => :company,
+      :order => 'numbers.id',
+      :order_direction => 'desc',
+      :custom_order => {
+        'numbers.company_id' => 'companies.name'
+      }
+    )
   end
 
   # GET /numbers/1
@@ -57,8 +62,16 @@ class NumbersController < ApplicationController
   # DELETE /numbers/1.json
   def destroy
     @number.destroy
+    notice = '删除成功'
+  rescue ActiveRecord::DeleteRestrictionError => e
+    puts e.inspect
+    notice = '删除失败:包含其他信息无法删除'
+  rescue Exception => e
+    puts e.inspect
+    notice = e.message
+  ensure
     respond_to do |format|
-      format.html { redirect_to numbers_url, notice: '删除成功' }
+      format.html { redirect_to numbers_url, notice: notice }
       format.json { head :no_content }
     end
   end

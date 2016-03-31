@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer_id: 1
+  number_id: 1
+  issue_at: 2016-03-18
+  back_at: 2016-03-18
+
+two:
+  customer_id: 1
+  number_id: 1
+  issue_at: 2016-03-18
+  back_at: 2016-03-18

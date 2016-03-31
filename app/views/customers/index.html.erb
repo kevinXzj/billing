@@ -1,0 +1,53 @@
+<%- model_class = Customer -%>
+<h3><%=t '.title', :default => t_model_name(model_class) %>列表</h3>
+<%= grid(@customers_grid,hide_csv_button: true) do |g|
+
+  g.column name:"#{model_class.human_attribute_name :name}", 
+  attribute: 'name' do |customer|
+    customer.name
+  end
+
+  g.column name:"#{model_class.human_attribute_name :linkman}", 
+  attribute: 'linkman' do |customer|
+    customer.linkman
+  end
+
+  g.column name:"#{model_class.human_attribute_name :phone}", 
+  attribute: 'phone' do |customer|
+    customer.phone
+  end
+
+  g.column name:"#{model_class.human_attribute_name :address}", 
+  attribute: 'address' do |customer|
+    customer.address
+  end
+
+  g.column name:"#{model_class.human_attribute_name :issue_number_count}" do |customer|
+    customer.issue_numbers.size
+  end
+
+  g.column name:"#{model_class.human_attribute_name :remark}",
+  attribute: 'remark' do |customer|
+    customer.remark
+  end
+
+  g.column do |customer|
+    link_to('查看', customer )
+  end
+
+  g.column do |customer|
+    link_to('修改', edit_customer_path(customer) )
+  end
+  g.column do |customer|
+    link_to('删除', customer, method: :delete, data: { confirm: '确定删除' } )
+  end
+
+  g.column do |customer|
+    link_to "账单", controller: "customers", action: "bill", id: customer.id
+  end
+end -%>
+
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_customer_path,
+            :class => 'btn btn-primary' %>

@@ -1,0 +1,44 @@
+<%= form_tag '/company_import_logs/upload', multipart: true,
+ :class => "form-inline", :role => "form" do %>
+  <%= file_field_tag  "file", style:"display:none", id:"lefile"%>
+  <div class="form-group">
+    <input id="photoCover" class="input-large" type="text" readonly="true">
+    <button id="selectBtn" type="button" class="btn btn-default">
+      选择文件
+    </button>
+  </div>
+  <button id="uploadBtn" type="button" class="btn">
+      上传
+  </button>
+  <%= submit_tag "上传" , class:"btn", id:"submit_btn", style:"display:none"%>
+  <div class="form-group">
+    <%= link_to "模板下载" ,download_company_import_logs_path %>
+  </div>
+<% end %>
+
+<h3>导入记录</h3>
+<%= grid(@company_import_log_grid ) do |g|
+
+  g.column name:"上传文件名称", attribute: 'file_name' do |companyImportLog|
+    companyImportLog.file_name
+  end
+
+  g.column name:"上传时间", attribute:'created_at'   do |companyImportLog|
+    companyImportLog.created_at.strftime('%Y-%m-%d') 
+  end
+
+  g.column name:"说明", attribute:'remark', filter:false   do |companyImportLog|
+    companyImportLog.remark
+  end
+
+  g.column do |companyImportLog|
+    link_to('查看', companyImportLog )
+  end
+  
+  g.column do |companyImportLog|
+    link_to('删除', companyImportLog, method: :delete, 
+      data: { confirm: "确定删除?" } )
+  end
+end -%>
+
+<%= link_to '返回', companies_path %>

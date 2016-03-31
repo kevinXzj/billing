@@ -10,6 +10,3 @@ $(".companies.index").ready ->
 	# alert "coffee"
 	
 	# alert "coffee1"
-	
-
-

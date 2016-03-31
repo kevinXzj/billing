@@ -1,0 +1,55 @@
+<%= form_for @bill, :html => { :class => "form-horizontal bill" } do |f| %>
+
+  <% if @bill.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@bill.errors.count, "error") %> prohibited this bill from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @bill.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :company_id, :class => 'control-label col-lg-2' %>
+   <div class="col-lg-10">
+      <%= f.select :company_id, Company.all.collect { |c| [ c.name, c.id ] }, include_blank: true %>
+    </div>
+    <%=f.error_span(:company_id) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :year, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :year, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:year) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :month, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :month, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:month) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :remark, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :remark, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:remark) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                bills_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+
+<% end %>

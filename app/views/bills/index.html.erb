@@ -1,0 +1,40 @@
+<%- model_class = Bill -%>
+<h3><%=t '.title', :default => t_model_name(model_class) %>列表</h3>
+<%= grid(@bills_grid ) do |g|
+
+  g.column name:"#{t_attr_name model_class,:company_id}", attribute: 'company_id',
+  :custom_filter => Company.all.map{|c| [c.name,c.id]} do |bill|
+    bill.company.name if bill.company
+  end
+
+  g.column name:"#{t_attr_name model_class,:year}", attribute: 'year' 
+
+  g.column name:"#{t_attr_name model_class,:month}", attribute: 'month' 
+
+  g.column name:"明细数量" do |bill|
+    bill.bill_items.size
+  end
+
+  g.column name:"#{t_attr_name model_class,:created_at}", attribute: 'created_at' do |bill|
+    bill.created_at.strftime('%Y-%m-%d').to_s 
+  end
+
+  g.column do |bill|
+    link_to('查看', bill )
+  end
+  g.column do |bill|
+    link_to('修改', edit_bill_path(bill) )
+  end
+  g.column do |bill|
+    link_to('删除', bill, method: :delete, data: { confirm: '确定删除' } )
+  end
+end -%>
+
+
+<%= link_to t('.import', :default => '导入'),
+            bill_import_logs_path,
+            :class => 'btn btn-primary' %>
+
+
+
+

@@ -1,0 +1,58 @@
+<%= form_tag upload_bill_import_logs_path  , multipart: true,
+ :class => "form-inline", :role => "form" do %>
+  <%= file_field_tag  "file", style:"display:none", id:"lefile"%>
+  <div class="form-group">
+    <%= label_tag(:company_id, "请选择套餐") %>
+    <%= select_tag :company_id, options_from_collection_for_select(Company.all,'id','name'), 
+    include_blank: true %>
+  </div>
+  <div class="form-group">
+    <%= label_tag("账单月份") %>
+    <%= select_tag :year,"<option>2016</option><option>2017</option>".html_safe, 
+    include_blank: true %>
+    <%= select_tag :month,"<option>1</option><option>2</option><option>3</option><option>4</option>
+    <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+    <option>10</option><option>11</option><option>12</option>".html_safe, 
+    include_blank: true %>
+  </div>
+  <div class="form-group">
+    <input id="photoCover" class="input-large" type="text" readonly="true">
+    <button id="selectBtn" type="button" class="btn btn-default">
+      选择文件
+    </button>
+  </div>
+  <button id="uploadBtn" type="button" class="btn">
+      上传
+  </button>
+  <%= submit_tag "上传" , class:"btn", id:"submit_btn", style:"display:none"%>
+  <div class="form-group">
+    <%= link_to "模板下载" ,download_bill_import_logs_path %>
+  </div>
+<% end %>
+
+<h3>导入记录</h3>
+<%= grid(@bill_import_log_grid ) do |g|
+
+  g.column name:"上传文件名称", attribute: 'file_name' do |log|
+    log.file_name
+  end
+
+  g.column name:"上传时间", attribute:'created_at'   do |log|
+    log.created_at.strftime('%Y-%m-%d') 
+  end
+
+  g.column name:"说明", attribute:'remark', filter:false   do |log|
+    log.remark
+  end
+
+  g.column do |log|
+    link_to('查看', log )
+  end
+  
+  g.column do |log|
+    link_to('删除', log, method: :delete, 
+      data: { confirm: "确定删除?" } )
+  end
+end -%>
+
+<%= link_to '返回', bills_path %>

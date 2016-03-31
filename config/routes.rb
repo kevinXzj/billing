@@ -1,22 +1,44 @@
 Rails.application.routes.draw do
 
-  get 'welcome/index'
-
-  resources :numbers
-
-  resources :companies do
-    get 'import', on: :collection
-  end
   
-  resources :sessions
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
   delete 'login' => 'sessions#destory'
   get 'login_out' => 'sessions#destory'
+ 
+  resources :numbers 
+  resources :companies 
 
+  resources :sessions 
+  resources :customers do
+    get   'bill', on: :member
+  end
+  
+  resources :company_import_logs do
+    post   'upload', on: :collection
+    get 'download', on: :collection
+  end
 
+  resources :number_import_logs do
+    post   'upload', on: :collection
+  end
+  
+  resources :issue_numbers
 
+  resources :issue_number_import_logs do
+    post   'upload', on: :collection
+    get 'download', on: :collection
+  end
+
+  resources :bills 
+
+  resources :bill_items
+
+  resources :bill_import_logs do
+    post   'upload', on: :collection
+    get 'download', on: :collection
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

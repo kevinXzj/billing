@@ -1,0 +1,58 @@
+
+<%- model_class = Customer -%>
+<div class="page-header">
+  <h1><%=t '.title', :default =>t_model_name(model_class) %></h1>
+</div>
+
+<p>
+  <strong><%= t_attr_name(model_class,:name) %>:</strong>
+  <%= @customer.name %>
+</p>
+<p>
+  <strong><%= t_attr_name(model_class,:linkman) %>:</strong>
+  <%= @customer.linkman %> 
+</p>
+<p>
+ <strong><%= t_attr_name(model_class,:phone) %>:</strong>
+ <%= @customer.phone %>  
+</p>
+<p>
+ <strong><%= t_attr_name(model_class,:address) %>:</strong>
+ <%= @customer.address %>  
+</p>
+<p>
+ <strong><%= t_attr_name(model_class,:remark) %>:</strong>
+ <%= @customer.remark %>  
+</p>
+
+<p>
+  <strong><%= t_model_name(IssueNumber)%></strong>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th><%= t_attr_name(IssueNumber,:number_phone_num)  %></th>
+        <th><%= t_attr_name(IssueNumber,:issue_at) %></th>
+        <th><%= t_attr_name(IssueNumber,:back_at)%></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @customer.issue_numbers.each do |is| %>
+        <tr>
+          <td><%= is.number.phone_num %></td>
+          <td><%= is.issue_at %></td>
+          <td><%= is.back_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              customers_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_customer_path(@customer), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              customer_path(@customer),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

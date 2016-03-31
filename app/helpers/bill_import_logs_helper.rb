@@ -1,0 +1,2 @@
+module BillImportLogsHelper
+end

@@ -3,6 +3,10 @@ zh:
     models:
       company: "套餐"
       number: "号码"
+      customer: "客户"
+      issue_number: "分配记录"
+      bill: "账单"
+      bill_item: "账单明细"
     attributes:
       company:
         name: "套餐名称"
@@ -14,7 +18,33 @@ zh:
         phone_num: "电话号码"
         real_num: "智能卡号"
         apply_at: "申请日期"
-        company_id: "所属公司"
+        company_id: "所属套餐"
+      customer:
+        name: "名称"
+        linkman: "联系人"
+        phone: "联系电话"
+        address: "地址"
+        remark: "备注"
+        issue_number_count: "分配记录数"
+      issue_number:
+        number_phone_num: "分配号码"
+        customer_name: "分配客户"
+        issue_at: "分配时间"
+        back_at: "回收时间"
+      bill:
+        company_name: "套餐名称"
+        company_id: "套餐"
+        year: "年"
+        month: "月"
+        remark: "备注"
+        created_at: "创建时间"
+      bill_item:
+        voice: "语音通信费"
+        message: "短信彩信费"
+        internet: "上网及数据通信费"
+        service: "综合信息服务费"
+        proxy: "代收费"
+        number: "号码"
     errors:
       messages:
         record_invalid: '验证失败: %{errors}'
@@ -168,6 +198,7 @@ zh:
       create: 新增
       submit: 保存
       update: 更新
+    actions: 操作
   number:
     currency:
       format:

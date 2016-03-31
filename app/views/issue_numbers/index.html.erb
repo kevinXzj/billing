@@ -1,0 +1,35 @@
+<%- model_class = IssueNumber -%>
+<h3><%=t '.title', :default => t_model_name(model_class) %></h3>
+<%= grid(@issue_numbers_grid ) do |g|
+ 	g.column name:"套餐" do |is|
+    is.number.company.name if is.number.company
+  end
+
+  g.column name:"号码" do |is|
+    is.number.phone_num if is.number
+  end
+
+  g.column name:"分配时间", attribute: 'issue_at' 
+
+  g.column name:"回收时间", attribute: 'back_at' 
+
+  g.column name:"客户" do |is|
+    is.customer.name if is.customer
+  end
+
+  g.column do |is|
+    link_to('查看', is )
+  end
+  g.column do |is|
+    link_to('修改', edit_issue_number_path(is) )
+  end
+  g.column do |is|
+    link_to('删除', is, method: :delete, data: { confirm: '确定删除' } )
+  end
+end -%>
+
+
+
+
+
+

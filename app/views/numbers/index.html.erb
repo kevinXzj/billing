@@ -1,24 +1,16 @@
 <%- model_class = Number -%>
-<h3><%=t '.title', :default => model_class.model_name.human %>列表</h3>
-<%= grid(@numbers_grid) do |g|
+<h3><%=t '.title', :default => t_model_name(model_class) %>列表</h3>
+<%= grid(@numbers_grid ) do |g|
 
-  g.column name:"#{model_class.human_attribute_name :phone_num}", 
-  attribute: 'phone_num' do |number|
-    number.phone_num
-  end
+  g.column name:"#{t_attr_name model_class,:phone_num}", attribute: 'phone_num' 
 
-  g.column name:"#{model_class.human_attribute_name :real_num}", 
-  attribute: 'real_num' do |number|
-    number.real_num
-  end
+  g.column name:"#{t_attr_name model_class,:real_num}", attribute: 'real_num' 
 
-  g.column name:"#{model_class.human_attribute_name :apply_at}", 
-  attribute: 'apply_at' do |number|
-    number.apply_at
-  end
+  g.column name:"#{t_attr_name model_class,:apply_at}", attribute: 'apply_at'
 
-  g.column name:"#{model_class.human_attribute_name :company_id}" do |number|
-    number.company.name
+  g.column name:"#{t_attr_name model_class,:company_id}", attribute: 'company_id',
+  :custom_filter => Company.all.map{|c| [c.name,c.id]} do |number|
+    number.company.name if number.company
   end
 
   g.column do |number|

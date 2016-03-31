@@ -1,18 +1,47 @@
 <%- model_class = Number -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <h1><%=t '.title', :default => t_model_name(model_class) %></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:phone_num) %>:</strong></dt>
-  <dd><%= @number.phone_num %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:real_num) %>:</strong></dt>
-  <dd><%= @number.real_num %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:apply_at) %>:</strong></dt>
-  <dd><%= @number.apply_at %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:company_id) %>:</strong></dt>
-  <dd><%= @number.company_id %></dd>
-</dl>
+
+<p>
+  <strong><%= t_attr_name(model_class,:phone_num) %>:</strong>
+  <%= @number.phone_num %>
+</p>
+<p>
+  <strong><%= t_attr_name(model_class,:real_num) %>:</strong>
+  <%= @number.real_num %>
+</p>
+<p>
+  <strong><%= t_attr_name(model_class,:apply_at) %>:</strong>
+  <%= @number.apply_at %>
+</p>
+<p>
+  <strong><%= t_attr_name(model_class,:company_id) %>:</strong>
+  <%= @number.company.name if @number.company %>
+</p>
+<p>
+  <strong><%= t_model_name(IssueNumber)%></strong>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th><%= t_attr_name(IssueNumber,:customer_name)  %></th>
+        <th><%= t_attr_name(IssueNumber,:issue_at) %></th>
+        <th><%= t_attr_name(IssueNumber,:back_at)%></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @number.issue_numbers.each do |is| %>
+        <tr>
+          <td><%= is.customer.name %></td>
+          <td><%= is.issue_at %></td>
+          <td><%= is.back_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
               numbers_path, :class => 'btn btn-default'  %>

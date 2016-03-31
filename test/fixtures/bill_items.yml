@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  voice: 9.99
+  message: 9.99
+  internet: 9.99
+  service: 9.99
+  proxy: 9.99
+  bill: 1
+
+two:
+  voice: 9.99
+  message: 9.99
+  internet: 9.99
+  service: 9.99
+  proxy: 9.99
+  bill: 1

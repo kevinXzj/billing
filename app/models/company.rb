@@ -1,6 +1,8 @@
 class Company < ActiveRecord::Base
-	validates_presence_of :name, :bill_num, :tel_office, :apply_at
-	validates_length_of :bill_num, :minimum => 10 #最少10
-	validates_uniqueness_of :bill_num, :name
-	has_many :numbers
+	validates_presence_of :name, :tel_office
+	validates_uniqueness_of :name
+	has_many :numbers, -> {order("id DESC")}
+	has_many :bills, -> {order("id DESC")}
+	belongs_to :company_import_log
+	belongs_to :issue_number_import_log
 end

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company: 1
+  year: 1
+  month: 1
+  remark: MyText
+
+two:
+  company: 1
+  year: 1
+  month: 1
+  remark: MyText
