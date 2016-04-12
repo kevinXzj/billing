@@ -31,8 +31,19 @@ class IssueNumberImportLogsController < ApplicationController
 
 	def destroy
     @issue_number_import_log.destroy
+    notice = '删除成功'
+  rescue ActiveRecord::DeleteRestrictionError => e
+    puts e.inspect
+    notice = '删除失败:包含其他信息无法删除'
+  rescue ActiveRecord::StatementInvalid => e
+    puts e.inspect
+    notice = '删除失败:包含其他信息无法删除'
+  rescue Exception => e
+    puts e.inspect
+    notice = e.message
+  ensure
     respond_to do |format|
-      format.html { redirect_to issue_number_import_logs_path, notice: '删除成功' }
+      format.html { redirect_to issue_number_import_logs_path, notice: notice }
       format.json { head :no_content }
     end
   end

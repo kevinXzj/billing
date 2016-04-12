@@ -27,8 +27,10 @@ zh:
         remark: "备注"
         issue_number_count: "分配记录数"
       issue_number:
+        issue_number: "分配记录"
         number_phone_num: "分配号码"
         customer_name: "分配客户"
+        customer_id: "分配客户"
         issue_at: "分配时间"
         back_at: "回收时间"
       bill:

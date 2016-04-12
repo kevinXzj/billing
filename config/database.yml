@@ -8,3 +8,7 @@ default: &default
 development:
   <<: *default
   database: billing
+
+production:
+  <<: *default
+  database: billing_production

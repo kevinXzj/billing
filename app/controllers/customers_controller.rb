@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :edit, :update, :destroy, :bill]
-  before_action :set_last_bill_month, only:[:bill]
+  before_action :set_customer, only: [:show, :edit, :update, :destroy, :bill,:export]
+  before_action :set_last_bill_month, only:[:bill,:export]
 
   # GET /customers
   # GET /customers.json
@@ -10,13 +10,39 @@ class CustomersController < ApplicationController
       order_direction: 'desc')
   end
 
-  def bill
+  def export
     start_date = Date.parse("#{@year}-#{@month}-1")
     end_date = start_date >> 1
+    @issue_numbers = IssueNumber.where("issue_numbers.customer_id= :customer_id and 
+        ( (issue_numbers.back_at >= :start_date and issue_numbers.back_at < :end_date ) or issue_numbers.back_at is null )
+        and (issue_numbers.issue_at < :end_date or issue_numbers.issue_at is null )",
+        {customer_id:@customer.id,start_date:start_date,end_date:end_date}).order("issue_numbers.id desc ")
+    respond_to do |format|
+      format.html
+      # format.csv { send_data @customers.to_csv }
+      format.xls do 
+        response.headers['Content-Disposition'] = 'attachment; filename="' + "#{@customer.name}#{@year}年#{@month}月账单" + '.xls"'
+      end
+    end
+  end
+
+  def bill
+    if @month.blank? && @year.blank?
+      respond_to do |format|
+        format.html { redirect_to customers_url, notice: '未导入账单,请先在账单管理中导入账单,再查看!' }
+      end
+      return
+    end
+    start_date = Date.parse("#{@year}-#{@month}-1")
+    end_date = start_date >> 1
+    # byebug
     @issue_numbers_grid = initialize_grid(IssueNumber,
       include: :number,
       per_page:200,
-      conditions:["issue_numbers.customer_id= ? and ( (issue_numbers.back_at >= ? and issue_numbers.back_at < ?)  or issue_numbers.back_at is null )",@customer.id,start_date,end_date],
+      conditions:["issue_numbers.customer_id= :customer_id and 
+        ( (issue_numbers.back_at >= :start_date and issue_numbers.back_at < :end_date ) or issue_numbers.back_at is null )
+        and (issue_numbers.issue_at < :end_date or issue_numbers.issue_at is null )",
+        {customer_id:@customer.id,start_date:start_date,end_date:end_date}],
       order:'issue_numbers.id', 
       order_direction: 'desc',
       custom_order:{
@@ -26,9 +52,11 @@ class CustomersController < ApplicationController
       # csv_field_separator: ';',
       csv_file_name:"#{@customer.name}#{@year}年#{@month}月账单"
     )
+    
     export_grid_if_requested('grid' => 'issue_numbers_grid') do
       # usual render or redirect code executed if the request is not a CSV export request
     end
+    # byebug
   end
 
   # GET /customers/1
@@ -105,8 +133,8 @@ class CustomersController < ApplicationController
     end
 
     def set_last_bill_month
-      @bill_list = Bill.select("year,month").group("year,month").order("year desc ,month desc")
       if(params[:year].blank? || params[:month].blank?)
+        @bill_list = Bill.select("year,month").group("year,month").order("year desc ,month desc")
         @year = @bill_list.first.year unless @bill_list.first.blank?
         @month = @bill_list.first.month unless @bill_list.first.blank?
       else

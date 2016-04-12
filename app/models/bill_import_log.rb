@@ -32,12 +32,15 @@ class BillImportLog < ImportLog
         bi.service = row[4].cell_value.strip unless row[4].blank?
         bi.proxy = row[5].cell_value.strip unless row[5].blank?
       end
+      # p bill_item.voice.class
+      # p bill_item.inspect
       bill_item.valid?
       if bill_item.errors.any?
         errors.push("第#{row_count}行:#{bill_item.errors.full_messages}.")
       else  
         bill.bill_items << bill_item 
       end
+      
     end
     unless errors.empty? 	
     	ImportLog.delete_file_by log.file_path
@@ -49,6 +52,8 @@ class BillImportLog < ImportLog
     end
     log.bill = bill
     log.remark = "导入数据成功,#{bill.company.name} #{year}年#{month}月的账单包含#{bill.bill_items.size}条明细记录(套餐包含#{bill.company.numbers.size}个号码)"
+    
+    # raise "测试"
     return log
 	end
 end

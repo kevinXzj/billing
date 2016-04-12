@@ -1,0 +1,57 @@
+<%= form_for @issue_number, :html => { :class => "form-horizontal issue_number" } do |f| %>
+  
+
+  <% if @issue_number.errors.any? %>
+    <div id="error_explanation">
+      <h2>错误:</h2>
+
+      <ul>
+      <% @issue_number.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  
+  <div class="form-group">
+    <%= f.hidden_field(:number_id) %>
+    <%= f.label :number_phone_num, :class => 'control-label col-lg-2' %>
+   <div class="col-lg-10">
+      <%= @issue_number.number.phone_num %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :customer_name, :class => 'control-label col-lg-2' %>
+   <div class="col-lg-10">
+      <%= f.select :customer_id, Customer.all.collect { |c| [ c.name, c.id ] }, include_blank: true %>
+    </div>
+    <%=f.error_span(:customer_id) %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :issue_at, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.date_select :issue_at, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:issue_at) %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :back_at, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.date_select :back_at, :class => 'form-control' ,include_blank:true%>
+    </div>
+    <%=f.error_span(:back_at) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                number_path(@issue_number.number_id), :class => 'btn btn-default' %>
+    </div>
+  </div>
+  
+<% end %>

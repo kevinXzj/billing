@@ -22,12 +22,16 @@
 </p>
 <p>
   <strong><%= t_model_name(IssueNumber)%></strong>
+
+  <%= link_to '新建分配记录', {controller: "issue_numbers", action:"new",number_id:@number.id}, :class => 'btn btn-default'  %>
   <table class="table table-bordered">
     <thead>
       <tr>
         <th><%= t_attr_name(IssueNumber,:customer_name)  %></th>
         <th><%= t_attr_name(IssueNumber,:issue_at) %></th>
         <th><%= t_attr_name(IssueNumber,:back_at)%></th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -37,6 +41,8 @@
           <td><%= is.customer.name %></td>
           <td><%= is.issue_at %></td>
           <td><%= is.back_at %></td>
+          <td><%= link_to('修改', edit_issue_number_path(is))%></td>
+          <td><%= link_to('删除', is, method: :delete, data: { confirm: '确定删除' } ) %></td>
         </tr>
       <% end %>
     </tbody>

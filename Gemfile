@@ -52,3 +52,7 @@ gem 'wice_grid', '3.6.0.pre4'
 gem 'font-awesome-sass', '~> 4.5.0'
 
 gem 'roo', '~> 2.3.2'
+
+gem 'byebug' , group: [:development, :test]
+
+# gem 'axlsx_rails'

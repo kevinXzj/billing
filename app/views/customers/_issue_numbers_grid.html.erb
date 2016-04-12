@@ -1,6 +1,6 @@
 <%= grid(@issue_numbers_grid, hide_csv_button:true) do |g|
 
-	g.blank_slate content_tag(:div, "无记录", class: 'well')
+  g.blank_slate content_tag(:div, "无记录", class: 'well')
 
   g.column name:"\xEF\xBB\xBF#{t_attr_name(BillItem,:number)}", 
   attribute: 'phone_num', assoc: :number do |item|
@@ -27,9 +27,6 @@
     item.number.bill_items.active(@year,@month).first.proxy unless item.number.bill_items.active(@year,@month).blank?
   end
 
-   g.column name:"#{t_attr_name(BillItem,:proxy)}" do |item|
-    item.number.bill_items.active(@year,@month).first.proxy unless item.number.bill_items.active(@year,@month).blank?
-  end
 
   g.column name:"#{t_attr_name(IssueNumber,:issue_at)}", attribute: 'issue_at' 
 

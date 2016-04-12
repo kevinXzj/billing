@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :sessions 
   resources :customers do
     get   'bill', on: :member
+    get   'export', on: :member
   end
   
   resources :company_import_logs do

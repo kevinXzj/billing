@@ -1,0 +1,40 @@
+<table border="1">
+  <tr>
+    <th><%= "#{t_attr_name(BillItem,:number)}" %></th>
+    <th><%= "#{t_attr_name(BillItem,:voice)}" %></th>
+    <th><%= "#{t_attr_name(BillItem,:message)}" %></th>
+    <th><%= "#{t_attr_name(BillItem,:internet)}" %></th>
+    <th><%= "#{t_attr_name(BillItem,:service)}" %></th>
+    <th><%= "#{t_attr_name(BillItem,:proxy)}" %></th>
+    <th><%= "#{t_attr_name(IssueNumber,:issue_at)}" %></th>
+    <th><%= "#{t_attr_name(IssueNumber,:back_at)}" %></th>
+  </tr>
+  <% @issue_numbers.each do |item| %>
+  <tr>
+    <td>
+      <%= item.number.phone_num %>
+    </td>
+    <td>
+      <%= item.number.bill_items.active(@year,@month).first.voice unless item.number.bill_items.active(@year,@month).blank? %>
+    </td>
+    <td>
+      <%= item.number.bill_items.active(@year,@month).first.message unless item.number.bill_items.active(@year,@month).blank? %>
+    </td>
+    <td>
+      <%= item.number.bill_items.active(@year,@month).first.internet unless item.number.bill_items.active(@year,@month).blank? %>
+    </td>
+    <td>
+      <%= item.number.bill_items.active(@year,@month).first.service unless item.number.bill_items.active(@year,@month).blank? %>
+    </td>
+    <td>
+      <%= item.number.bill_items.active(@year,@month).first.proxy unless item.number.bill_items.active(@year,@month).blank? %>
+    </td>
+    <td>
+      <%= item.issue_at %>
+    </td>
+    <td>
+      <%= item.back_at %>
+    </td>
+  </tr>
+  <% end %>
+</table>

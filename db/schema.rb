@@ -14,15 +14,15 @@
 ActiveRecord::Schema.define(version: 20160325051902) do
 
   create_table "bill_items", force: :cascade do |t|
-    t.decimal  "voice",                precision: 10
-    t.decimal  "message",              precision: 10
-    t.decimal  "internet",             precision: 10
-    t.decimal  "service",              precision: 10
-    t.decimal  "proxy",                precision: 10
+    t.decimal  "voice",                precision: 10, scale: 2
+    t.decimal  "message",              precision: 10, scale: 2
+    t.decimal  "internet",             precision: 10, scale: 2
+    t.decimal  "service",              precision: 10, scale: 2
+    t.decimal  "proxy",                precision: 10, scale: 2
     t.integer  "bill_id",    limit: 4
-    t.integer  "number_id",  limit: 4,                null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.integer  "number_id",  limit: 4,                          null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   add_index "bill_items", ["bill_id"], name: "fk_rails_6de1f5051f", using: :btree
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 20160325051902) do
     t.integer  "customer_id",                limit: 4, null: false
     t.integer  "number_id",                  limit: 4, null: false
     t.integer  "issue_number_import_log_id", limit: 4
-    t.date     "issue_at",                             null: false
+    t.date     "issue_at"                            
     t.date     "back_at"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false

@@ -6,63 +6,78 @@ class IssueNumberImportLog < ImportLog
 	has_many :numbers, dependent: :destroy
 
 	def self.build(tmp_file)
-		base_hash = save_upload_file(tmp_file)
-    data = read_data(base_hash[:file_path])
-    issue_number_import_log = IssueNumberImportLog.create(base_hash)
-    new_update_count_hash = {
-    	company:0,
-    	customer:0,
-    	number:0,
-    	new_issue_number:0,
-    	update_issue_number:0,
-    	empty_count:data[:empty_count],
-    	re_issue_number_count:data[:re_issue_number_count]
-    }
-    data[:data].each do |issueNumber|
-    	number = Number.find_or_create_by!(phone_num:issueNumber.number.phone_num) do |n|
-     		n.real_num = issueNumber.number.real_num
-     		n.apply_at = Time.new
-     		company = Company.find_or_create_by!(name:issueNumber.number.company.name) do |c|
-	     		c.tel_office = issueNumber.number.company.tel_office
-	     		c.issue_number_import_log = issue_number_import_log
-	     		new_update_count_hash[:company] += 1
-	    	end
-	    	n.company = company
-     		n.issue_number_import_log = issue_number_import_log
-     		new_update_count_hash[:number] += 1
-    	end
-    	customer = Customer.find_or_create_by!(name:issueNumber.customer.name) do |c|
-    		c.issue_number_import_log = issue_number_import_log
-    		new_update_count_hash[:customer] += 1
-    	end
-    	is = IssueNumber.find_by(number_id:number.id,customer_id:customer.id)
-    	if is.nil?
-	    	IssueNumber.create(
-	    		number_id:number.id,
-	    		customer_id:customer.id,
-	    		issue_at:issueNumber.issue_at,
-	    		back_at:issueNumber.back_at,
-	    		issue_number_import_log:issue_number_import_log
-	    		)
-	    	new_update_count_hash[:new_issue_number] += 1
-    	else
-    		is.issue_at = issueNumber.issue_at
-    		is.back_at = issueNumber.back_at
-    		new_update_count_hash[:update_issue_number] += 1
-    		is.save
-    	end
+    ActiveRecord::Base.transaction do
+  		base_hash = save_upload_file(tmp_file)
+      data = read_data(base_hash[:file_path])
+      issue_number_import_log = IssueNumberImportLog.create(base_hash)
+      new_update_count_hash = {
+      	company:0,
+      	customer:0,
+      	number:0,
+      	new_issue_number:0,
+      	update_issue_number:0,
+      	empty_count:data[:empty_count],
+      	re_issue_number_count:data[:re_issue_number_count]
+      }
+      errors = []
+      data[:data].each do |row|
+        row_num = row[:row_num]
+        issueNumber = row[:issueNumber]
+      	number = Number.find_or_create_by!(phone_num:issueNumber.number.phone_num) do |n|
+       		n.real_num = issueNumber.number.real_num
+       		n.apply_at = Time.new
+       		company = Company.find_or_create_by!(name:issueNumber.number.company.name) do |c|
+  	     		c.tel_office = issueNumber.number.company.tel_office
+  	     		c.issue_number_import_log = issue_number_import_log
+  	     		new_update_count_hash[:company] += 1
+  	    	end
+  	    	n.company = company
+       		n.issue_number_import_log = issue_number_import_log
+       		new_update_count_hash[:number] += 1
+      	end
+      	customer = Customer.find_or_create_by!(name:issueNumber.customer.name) do |c|
+      		c.issue_number_import_log = issue_number_import_log
+      		new_update_count_hash[:customer] += 1
+      	end
+      	is = IssueNumber.find_by(number_id:number.id,customer_id:customer.id)
+      	if is.nil?
+  	    	is = IssueNumber.new(
+  	    		number_id:number.id,
+  	    		customer_id:customer.id,
+  	    		issue_at:issueNumber.issue_at,
+  	    		back_at:issueNumber.back_at,
+  	    		issue_number_import_log:issue_number_import_log
+  	    		)
+  	    	new_update_count_hash[:new_issue_number] += 1
+      	else
+          #如果有相同的记录,默认更新记录(只覆盖不新增)
+      		is.issue_at = issueNumber.issue_at
+      		is.back_at = issueNumber.back_at
+      		new_update_count_hash[:update_issue_number] += 1
+      	end
+        # is.save(validate: false)
+        # is.save!
+        begin
+          is.save!
+        rescue Exception => e
+          errors << "第#{row_num}行,#{e}"
+        end
+      end
+      unless errors.blank?
+        raise errors.join(ImportLog::FILE_TAG)
+      end
+      remark_list =["导入成功"]
+      remark_list.push("新套餐#{new_update_count_hash[:company]}个") if new_update_count_hash[:company]>0
+      remark_list.push("新号码#{new_update_count_hash[:number]}个") if new_update_count_hash[:number]>0
+      remark_list.push("新客户#{new_update_count_hash[:customer]}个") if new_update_count_hash[:customer]>0
+      remark_list.push("新分配记录#{new_update_count_hash[:new_issue_number]}个") if new_update_count_hash[:new_issue_number]>0
+      remark_list.push("更新分配记录#{new_update_count_hash[:update_issue_number]}个") if new_update_count_hash[:update_issue_number]>0
+      remark_list.push("回收再分配记录#{new_update_count_hash[:re_issue_number_count]}个") if new_update_count_hash[:re_issue_number_count]>0
+      remark_list.push("去掉空行#{new_update_count_hash[:empty_count]}条") if new_update_count_hash[:empty_count]>0
+         
+      issue_number_import_log.remark = remark_list.join(",")
+  		return issue_number_import_log
     end
-    remark_list =["导入成功"]
-    remark_list.push("新套餐#{new_update_count_hash[:company]}个") if new_update_count_hash[:company]>0
-    remark_list.push("新号码#{new_update_count_hash[:number]}个") if new_update_count_hash[:number]>0
-    remark_list.push("新客户#{new_update_count_hash[:customer]}个") if new_update_count_hash[:customer]>0
-    remark_list.push("新分配记录#{new_update_count_hash[:new_issue_number]}个") if new_update_count_hash[:new_issue_number]>0
-    remark_list.push("更新分配记录#{new_update_count_hash[:update_issue_number]}个") if new_update_count_hash[:update_issue_number]>0
-    remark_list.push("回收再分配记录#{new_update_count_hash[:re_issue_number_count]}个") if new_update_count_hash[:re_issue_number_count]>0
-    remark_list.push("去掉空行#{new_update_count_hash[:empty_count]}条") if new_update_count_hash[:empty_count]>0
-       
-    issue_number_import_log.remark = remark_list.join(",")
-		return issue_number_import_log
 	end
 
 	private
@@ -102,7 +117,7 @@ class IssueNumberImportLog < ImportLog
       validates_info << "当前客户不能为空" if customer_name.blank?
 
       begin
-        issue_number_issue_at = read_date(issue_number_issue_at,true)
+        issue_number_issue_at = read_date(issue_number_issue_at,false)
       rescue Exception => e
         validates_info << "发放时间数据错误"
       end
@@ -123,11 +138,11 @@ class IssueNumberImportLog < ImportLog
           i.issue_at = issue_number_issue_at
           i.back_at = issue_number_back_at
         end
-        data << issueNumber
+        data << {row_num:row_num,issueNumber:issueNumber}
         if customers.size > 1
 
           begin
-            issue_number_re_issue_at = read_date(issue_number_re_issue_at,true)
+            issue_number_re_issue_at = read_date(issue_number_re_issue_at,false)
           rescue Exception => e
             validates_info << "下单时间数据错误"
           end
@@ -138,7 +153,7 @@ class IssueNumberImportLog < ImportLog
             i.number = Number.new(phone_num:number_phone_num,real_num:number_real_num,company:company)
             i.issue_at = issue_number_re_issue_at
           end 
-          data << re_issueNumber
+          data << {row_num:row_num,issueNumber:re_issueNumber}
           re_issue_number_count += 1
         end
       else

@@ -4,7 +4,7 @@ class CreateIssueNumbers < ActiveRecord::Migration
       t.integer :customer_id, null: false
       t.integer :number_id, null: false
       t.integer :issue_number_import_log_id
-      t.date :issue_at, null: false
+      t.date :issue_at
       t.date :back_at
 
       t.timestamps null: false
