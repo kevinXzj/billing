@@ -31,8 +31,8 @@ zh:
         number_phone_num: "分配号码"
         customer_name: "分配客户"
         customer_id: "分配客户"
-        issue_at: "分配时间"
-        back_at: "回收时间"
+        issue_at: "启用日期"
+        back_at: "退回日期"
       bill:
         company_name: "套餐名称"
         company_id: "套餐"

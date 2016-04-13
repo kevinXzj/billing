@@ -6,7 +6,10 @@ class CompaniesController < ApplicationController
   def index
     @companies_grid = initialize_grid(Company, 
       order:'companies.id', 
-      order_direction: 'desc')
+      order_direction: 'desc',
+      :custom_order => {
+        'companies.name' => 'CONVERT( companies.name USING gbk ) COLLATE gbk_chinese_ci '
+      })
   end
 
   # GET /companies/1

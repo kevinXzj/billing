@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160325051902) do
+ActiveRecord::Schema.define(version: 20160413024942) do
 
   create_table "bill_items", force: :cascade do |t|
     t.decimal  "voice",                precision: 10, scale: 2
@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20160325051902) do
   add_index "bill_items", ["number_id"], name: "fk_rails_e8f2222a4d", using: :btree
 
   create_table "bills", force: :cascade do |t|
-    t.integer  "company_id",         limit: 4,     null: false
     t.integer  "bill_import_log_id", limit: 4
     t.integer  "year",               limit: 4
     t.integer  "month",              limit: 4
@@ -39,7 +38,6 @@ ActiveRecord::Schema.define(version: 20160325051902) do
   end
 
   add_index "bills", ["bill_import_log_id"], name: "fk_rails_370c407e0f", using: :btree
-  add_index "bills", ["company_id"], name: "fk_rails_d6d82dde08", using: :btree
 
   create_table "companies", force: :cascade do |t|
     t.string   "name",                       limit: 255
@@ -81,7 +79,7 @@ ActiveRecord::Schema.define(version: 20160325051902) do
     t.integer  "customer_id",                limit: 4, null: false
     t.integer  "number_id",                  limit: 4, null: false
     t.integer  "issue_number_import_log_id", limit: 4
-    t.date     "issue_at"                            
+    t.date     "issue_at"
     t.date     "back_at"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
@@ -116,7 +114,6 @@ ActiveRecord::Schema.define(version: 20160325051902) do
 
   add_foreign_key "bill_items", "bills", on_delete: :cascade
   add_foreign_key "bill_items", "numbers"
-  add_foreign_key "bills", "companies"
   add_foreign_key "bills", "import_logs", column: "bill_import_log_id", on_delete: :cascade
   add_foreign_key "companies", "import_logs", column: "company_import_log_id", on_delete: :cascade
   add_foreign_key "companies", "import_logs", column: "issue_number_import_log_id", on_delete: :cascade

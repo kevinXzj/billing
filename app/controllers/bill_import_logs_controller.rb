@@ -15,7 +15,7 @@ class BillImportLogsController < ApplicationController
   end
 
   def upload
-    @bill_import_log =BillImportLog.build(params[:file],params[:company_id],params[:year],params[:month])
+    @bill_import_log =BillImportLog.build(params[:file],params[:year],params[:month])
     @bill_import_log.save!
     respond_to do |format|
       format.html { redirect_to @bill_import_log, notice: '上传成功'}

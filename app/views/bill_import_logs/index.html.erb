@@ -2,11 +2,6 @@
  :class => "form-inline", :role => "form" do %>
   <%= file_field_tag  "file", style:"display:none", id:"lefile"%>
   <div class="form-group">
-    <%= label_tag(:company_id, "请选择套餐") %>
-    <%= select_tag :company_id, options_from_collection_for_select(Company.all,'id','name'), 
-    include_blank: true %>
-  </div>
-  <div class="form-group">
     <%= label_tag("账单月份") %>
     <%= select_tag :year,"<option>2016</option><option>2017</option>".html_safe, 
     include_blank: true %>
@@ -54,5 +49,6 @@
       data: { confirm: "确定删除?" } )
   end
 end -%>
-
+<!-- 
 <%= link_to '返回', bills_path %>
+ -->

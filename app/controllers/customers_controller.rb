@@ -7,7 +7,10 @@ class CustomersController < ApplicationController
   def index
      @customers_grid = initialize_grid(Customer, 
       order:'id', 
-      order_direction: 'desc')
+      order_direction: 'desc',
+      :custom_order => {
+        'customers.name' => 'CONVERT( customers.name USING gbk ) COLLATE gbk_chinese_ci '
+      })
   end
 
   def export

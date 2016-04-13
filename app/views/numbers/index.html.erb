@@ -9,7 +9,7 @@
   g.column name:"#{t_attr_name model_class,:apply_at}", attribute: 'apply_at'
 
   g.column name:"#{t_attr_name model_class,:company_id}", attribute: 'company_id',
-  :custom_filter => Company.all.map{|c| [c.name,c.id]} do |number|
+  :custom_filter => Company.all.order("CONVERT( name USING gbk ) COLLATE gbk_chinese_ci ASC").map{|c| [c.name,c.id]} do |number|
     number.company.name if number.company
   end
 

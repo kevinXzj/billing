@@ -10,7 +10,7 @@ class CompanyImportLog < ImportLog
     end
     success_companies =[]
     errors = []
-    xlsx.each_row_streaming(offset: 2) do |row|
+    xlsx.each_row_streaming(offset: 1) do |row|
       company = Company.new do |c|
         c.tel_office = row[0].cell_value.strip
         c.name = row[1].cell_value.strip

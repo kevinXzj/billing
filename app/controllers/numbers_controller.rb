@@ -9,7 +9,7 @@ class NumbersController < ApplicationController
       :order => 'numbers.id',
       :order_direction => 'desc',
       :custom_order => {
-        'numbers.company_id' => 'companies.name'
+        'numbers.company_id' => 'CONVERT( companies.name USING gbk ) COLLATE gbk_chinese_ci '
       }
     )
   end
