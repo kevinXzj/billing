@@ -5,3 +5,4 @@
 5.rake assets:precompile RAILS_ENV=production #预编译资源文件
 6.config.serve_static_files = true #默认为false(config/environments/production.rb),加载静态资源,有前端服务器(nginx)时设置成false
 7.启动服务:在应用目录下 rails s -e production -b 192.168.0.80
+

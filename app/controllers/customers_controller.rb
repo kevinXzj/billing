@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :edit, :update, :destroy, :bill,:export]
-  before_action :set_last_bill_month, only:[:bill,:export]
+  before_action :set_customer, only: [:show, :edit, :update, :destroy, :bill, :export]
+  before_action :set_last_bill_month, only:[:bill, :export]
 
   # GET /customers
   # GET /customers.json
@@ -14,14 +14,11 @@ class CustomersController < ApplicationController
   end
 
   def export
-    start_date = Date.parse("#{@year}-#{@month}-1")
-    end_date = start_date >> 1
-    @issue_numbers = IssueNumber.where("issue_numbers.customer_id= :customer_id and 
-        ( (issue_numbers.back_at >= :start_date and issue_numbers.back_at < :end_date ) or issue_numbers.back_at is null )
-        and (issue_numbers.issue_at < :end_date or issue_numbers.issue_at is null )",
-        {customer_id:@customer.id,start_date:start_date,end_date:end_date}).order("issue_numbers.id desc ")
+    @issue_numbers = IssueNumber.where(
+      customer_issue_numbers_conditions(@customer.id,@start_date,@end_date)
+    ).order("issue_numbers.id desc ")
     respond_to do |format|
-      format.html
+      # format.html
       # format.csv { send_data @customers.to_csv }
       format.xls do 
         response.headers['Content-Disposition'] = 'attachment; filename="' + "#{@customer.name}#{@year}年#{@month}月账单" + '.xls"'
@@ -30,22 +27,11 @@ class CustomersController < ApplicationController
   end
 
   def bill
-    if @month.blank? && @year.blank?
-      respond_to do |format|
-        format.html { redirect_to customers_url, notice: '未导入账单,请先在账单管理中导入账单,再查看!' }
-      end
-      return
-    end
-    start_date = Date.parse("#{@year}-#{@month}-1")
-    end_date = start_date >> 1
     # byebug
     @issue_numbers_grid = initialize_grid(IssueNumber,
       include: :number,
       per_page:200,
-      conditions:["issue_numbers.customer_id= :customer_id and 
-        ( (issue_numbers.back_at >= :start_date and issue_numbers.back_at < :end_date ) or issue_numbers.back_at is null )
-        and (issue_numbers.issue_at < :end_date or issue_numbers.issue_at is null )",
-        {customer_id:@customer.id,start_date:start_date,end_date:end_date}],
+      conditions:customer_issue_numbers_conditions(@customer.id,@start_date,@end_date),
       order:'issue_numbers.id', 
       order_direction: 'desc',
       custom_order:{
@@ -125,24 +111,53 @@ class CustomersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_customer
-      @customer = Customer.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def customer_params
-      params.require(:customer).permit(:name, :linkman, :phone, :address, :remark)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_customer
+    @customer = Customer.find(params[:id])
+  end
 
-    def set_last_bill_month
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def customer_params
+    params.require(:customer).permit(:name, :linkman, :phone, :address, :remark)
+  end
+
+  def set_last_bill_month
+    @bill_list = Bill.select("year,month").group("year,month").order("year desc ,month desc")
+    if @bill_list.blank?
+      respond_to do |format|
+        format.html { redirect_to customers_url, notice: '未导入账单,请先在账单管理中导入账单,再查看!' }
+      end
+    else
       if(params[:year].blank? || params[:month].blank?)
-        @bill_list = Bill.select("year,month").group("year,month").order("year desc ,month desc")
-        @year = @bill_list.first.year unless @bill_list.first.blank?
-        @month = @bill_list.first.month unless @bill_list.first.blank?
+        @year = @bill_list.first.year
+        @month = @bill_list.first.month
       else
         @year = params[:year]
         @month = params[:month]
       end 
+      @start_date = Date.parse("#{@year}-#{@month}-1")
+      @end_date = @start_date >> 1
     end
+  end
+
+  def customer_issue_numbers_conditions(customer_id,start_date,end_date)
+    conditions = [
+      "issue_numbers.customer_id= :customer_id 
+      and 
+      ( 
+        (
+          issue_numbers.back_at >= :start_date and issue_numbers.back_at < :end_date ) 
+          or 
+          issue_numbers.back_at is null 
+        )
+      and 
+      (
+        issue_numbers.issue_at < :end_date 
+        or 
+        issue_numbers.issue_at is null 
+      )",
+      {customer_id:customer_id,start_date:start_date,end_date:end_date}
+    ]
+  end
 end
