@@ -18,7 +18,7 @@ class BillImportLog < ImportLog
 
     errors = []
     xlsx = Roo::Spreadsheet.open(base_hash[:file_path])
-    xlsx.each_row_streaming(offset: 1) do |row|
+    xlsx.each_row_streaming(pad_cells: true, offset: 1) do |row|
       tel_office = row[0].cell_value.strip unless row[0].blank?
       company_name = row[1].cell_value.strip unless row[1].blank?
       phone_num = row[2].cell_value.strip unless row[2].blank?
@@ -54,7 +54,7 @@ class BillImportLog < ImportLog
       if  bill_item.valid?
         bill.bill_items << bill_item 
       else  
-        errors.push("第#{row_count}行:#{bill_item.errors.full_messages}.")
+        errors.push("第#{row_count}行[号码(#{phone_num})]:#{bill_item.errors.full_messages}.")
       end
       
     end

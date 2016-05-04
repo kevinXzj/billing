@@ -87,7 +87,7 @@ class IssueNumberImportLog < ImportLog
     empty_count = 0
     re_issue_number_count = 0
     xlsx = Roo::Spreadsheet.open(file)
-    xlsx.each_row_streaming(offset: 1) do |row|
+    xlsx.each_row_streaming(pad_cells: true, offset: 1) do |row|
       validates_info = []
       unless row[0].blank?
         company_tel_office = row[0].cell_value.strip
